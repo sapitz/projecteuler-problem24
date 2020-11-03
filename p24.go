@@ -11,7 +11,7 @@ const dim int = 10
 
 var a = [dim]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 
-var pos int = 3000000
+var pos int = 20
 
 var perm, facts [dim]int
 
@@ -35,38 +35,43 @@ func main() {
 	// perm = a
 	// permute(0, &perm)
 
-	//fmt.Printf("Permutations generated in Lexicographic sequence: \n")
-	//perm = a
-	//permuteLexi(&perm)
+	fmt.Printf("Permutations generated in Lexicographic sequence: \n")
+	perm = a
+	permuteLexi(&perm)
 
-	fmt.Printf("Permutation at position in Lexicographic sequence: \n")
+	fmt.Printf("Permutation at position %d in Lexicographic sequence: \n", pos)
 	perm = a
 	getLexiPerm(perm, pos)
 
 }
 
 func getLexiPerm(arr [dim]int, pos int) {
-	mod := pos
-	res := arr
+	var res [dim]int
+	var mod0, temp int
+
 	for i := dim - 1; i >= 0; i-- {
-		res[i] = int(math.Trunc(float64(mod / facts[i])))
-		mod = mod % facts[i]
-		fmt.Printf("%d: %d \n", i, mod)
-		//	if mod == 0 {
-		//		break
-		//	}
+		res[i] = int(math.Trunc(float64(pos / facts[i])))
+		pos = pos % facts[i]
+		if pos == 0 {
+			mod0 = dim - 1 - i
+			break
+		}
 	}
 	reverse(&res, 0, dim-1)
-	fmt.Printf("[%s] \n", iarrtostr(res))
-	fmt.Printf("[%s] \n", iarrtostr(arr))
 	for i := 0; i < dim; i++ {
-		temp := res[i]
-		res[i] = arr[res[i]]
+		if i == mod0 {
+			temp = res[i] - 1
+		} else {
+			temp = res[i]
+		}
+		res[i] = arr[temp]
 		remove(&arr, temp)
-		fmt.Println()
-		fmt.Printf("%d: [%s] \n", i, iarrtostr(res))
-		fmt.Printf("[%s] \n", iarrtostr(arr))
+		if i == mod0 {
+			reverse(&arr, 0, dim-2-i)
+		}
+		//		fmt.Printf("%d: [%s] [%s] \n", i, iarrtostr(res), iarrtostr(arr))
 	}
+	fmt.Printf("[%s] \n", iarrtostr(res))
 }
 
 func permuteLexi(arr *[dim]int) {
