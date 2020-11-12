@@ -11,7 +11,7 @@ const dim int = 10
 
 var a = [dim]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 
-var pos int = 20
+var pos int = 1000000
 
 var perm, facts [dim]int
 
@@ -45,6 +45,24 @@ func main() {
 
 }
 
+/*
+function to directly calculate and print the permutation of elements at a given position of
+all possible, lexicographically ordered permutations of a given array of elements, as per problem 24
+of the Euler Project.
+	arr is an arr of integers of size dim
+	pos is the position of the permutation to calculate
+
+The alogorithm developed and used here is illustrated by example in the accompanying spreadsheet.
+There are 2 steps to this approach:
+	1.	Use size of arr and calculate whole integer of pos divided by factorial of each size-value -1.
+		Store result into a result array. Note: same index is used here, so results are backwards.
+		Iterate until result is 0, using remainder (mod) of each calculation as input into the next one.
+		Use position where remainder (mod) result is 0 as reversal point. Stop and reverse results array.
+	2. 	Iterate over results array.
+		Use each result (trunc) value as an index into position array. Remove any positions allocated.
+		At reversal point value (index) is one less.
+		Reverse remainder of results array.
+*/
 func getLexiPerm(arr [dim]int, pos int) {
 	var res [dim]int
 	var mod0, temp int
@@ -69,14 +87,20 @@ func getLexiPerm(arr [dim]int, pos int) {
 		if i == mod0 {
 			reverse(&arr, 0, dim-2-i)
 		}
-		//		fmt.Printf("%d: [%s] [%s] \n", i, iarrtostr(res), iarrtostr(arr))
+		// Uncomment next line to see how solution develops per iteration
+		fmt.Printf("%d: [%s] [%s] \n", i, iarrtostr(res), iarrtostr(arr))
 	}
 	fmt.Printf("[%s] \n", iarrtostr(res))
 }
 
+/*
+function to develop all permutations of an array of integers in lexicographical order and print value at pos.
+This algorithm is used to validate direct approach, taken from https://www.bernardosulzbach.com/lexicographic-permutations/
+*/
 func permuteLexi(arr *[dim]int) {
 	p := 0
 	for n := 1; n <= int(factorial(dim)); n++ {
+		// Print only value at pos
 		if n == pos {
 			fmt.Printf("%d: [%s] \n", n, iarrtostr(*arr))
 		}
@@ -124,16 +148,31 @@ func permuteHeap(p int, arr *[dim]int) {
 	}
 }
 
+/*
+function to swap two elements in an array
+		a is a reference to an array of size dim
+		i, j specifiy 0-based position of elements to swap
+*/
 func swap(a *[dim]int, i int, j int) {
 	a[i], a[j] = a[j], a[i]
 }
 
+/*
+function to reverse order of a contiguous portion of array
+		a is a reference to an array of size dim
+		start, end specifiy 0-based sub array to reverse
+*/
 func reverse(a *[dim]int, start int, end int) {
 	for i, j := start, end; i < j; i, j = i+1, j-1 {
 		swap(a, i, j)
 	}
 }
 
+/*
+function to remove item at specified position in an array and pad 0 at end of array
+	a is a reference to an array of size dim
+	pos position of element to remove
+*/
 func remove(a *[dim]int, pos int) {
 	for i := pos; i < dim-1; i++ {
 		a[i] = a[i+1]
@@ -174,6 +213,5 @@ func iarrtostr(a [dim]int) string {
 }
 
 /*
-https://www.bernardosulzbach.com/lexicographic-permutations/
 http://www.tropicalcoder.com/APermutationOnCombinatorialAlgorithms.htm
 */
