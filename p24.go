@@ -21,11 +21,11 @@ func main() {
 		facts[i] = int(factorial(i))
 	}
 
-	fmt.Printf("This is the original set: \n")
-	fmt.Printf("[%s] \n", iarrtostr(a))
+	// fmt.Printf("This is the original set: \n")
+	// fmt.Printf("[%s] \n", iarrtostr(a))
 
-	fmt.Printf("Factorials for dim = %d: \n", dim)
-	fmt.Printf("[%s] \n", iarrtostr(facts))
+	// fmt.Printf("Factorials for dim = %d: \n", dim)
+	// fmt.Printf("[%s] \n", iarrtostr(facts))
 
 	// fmt.Printf("Permutations generated with Heap algorithm: \n")
 	// perm = a
@@ -61,7 +61,7 @@ There are 2 steps to this approach:
 	2. 	Iterate over results array.
 		Use each result (trunc) value as an index into position array. Remove any positions allocated.
 		At reversal point value (index) is one less.
-		Reverse remainder of results array.
+		Reverse remainder of results array and complete iterations.
 */
 func getLexiPerm(arr [dim]int, pos int) {
 	var res [dim]int
